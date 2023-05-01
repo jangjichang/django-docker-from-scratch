@@ -9,10 +9,11 @@ $ git clone https://github.com/jangjichang/django-docker-from-scratch.git
 $ git checkout feat/1-run-python-using-docker
 ```
 
-Make docker image
+Builds Docker images from a Dockerfile. 
 ```shell
 $ docker build -t django-docker-from-scratch  .
 ```
+If you are curious about ENV [PYTHONUNBUFFERED](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONUNBUFFERED), refer to the link
 
 Check docker image created
 ```shell
