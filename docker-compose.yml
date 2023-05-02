@@ -1,10 +1,13 @@
 version: '3'
 
+volumes:
+  dbdata:
+
 services:
   db:
     image: postgres:15.2
     volumes:
-      - ./docker/data:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postdb
       - POSTGRES_USER=postuser
