@@ -1,12 +1,36 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:15.2
+    volumes:
+      - ./docker/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postdb
+      - POSTGRES_USER=postuser
+      - POSTGRES_PASSWORD=postsecret
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
   django:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_NAME=postdb
+      - DJANGO_DB_USERNAME=postuser
+      - DJANGO_DB_PASSWORD=postsecret
+      - DJANGO_DB_PORT=5432
+    depends_on:
+      - db
+    restart: always
     ports:
       - "8000:8000"
     volumes:
       - ./:/app/
-    command: ["./manage.py", "runserver", "0:8000"]
+    command:
+      - bash
+      - -c
+      - |
+        chmod 755 wait-for-it.sh
+        ./wait-for-it.sh db:5432 -t 10
+        python manage.py runserver 0:8000
